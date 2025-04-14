@@ -20,6 +20,8 @@
 #include "sm2-dsa.h"
 #include "sm2-pke.h"
 
+#if !defined(MBEDTLS_PSA_CRYPTO_C)
+
 /* Translate mbedtls result to TEE result */
 static TEE_Result get_tee_result(int lmd_res)
 {
@@ -546,3 +548,4 @@ err:
 
 	return TEE_ERROR_OUT_OF_MEMORY;
 }
+#endif

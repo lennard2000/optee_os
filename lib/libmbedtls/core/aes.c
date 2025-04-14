@@ -13,7 +13,7 @@
 #include <mbedtls/platform_util.h>
 #include <string.h>
 
-#if defined(MBEDTLS_AES_ALT)
+#if defined(MBEDTLS_AES_ALT) && !defined(MBEDTLS_PSA_CRYPTO_C)
 void mbedtls_aes_init(mbedtls_aes_context *ctx)
 {
 	assert(ctx);

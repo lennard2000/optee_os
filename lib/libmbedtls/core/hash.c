@@ -21,6 +21,7 @@
 #include <tee_api_types.h>
 #include <utee_defines.h>
 #include <util.h>
+#if !defined(MBEDTLS_PSA_CRYPTO_C)
 
 struct mbed_hash_ctx {
 	struct crypto_hash_ctx hash_ctx;
@@ -136,47 +137,36 @@ static TEE_Result mbed_hash_alloc_ctx(struct crypto_hash_ctx **ctx_ret,
 	return TEE_SUCCESS;
 }
 
-#if defined(CFG_CRYPTO_MD5)
 TEE_Result crypto_md5_alloc_ctx(struct crypto_hash_ctx **ctx)
 {
 	return mbed_hash_alloc_ctx(ctx, MBEDTLS_MD_MD5);
 }
-#endif
 
-#if defined(CFG_CRYPTO_SHA1)
 TEE_Result crypto_sha1_alloc_ctx(struct crypto_hash_ctx **ctx)
 {
 	return mbed_hash_alloc_ctx(ctx, MBEDTLS_MD_SHA1);
 }
-#endif
 
-#if defined(CFG_CRYPTO_SHA224)
 TEE_Result crypto_sha224_alloc_ctx(struct crypto_hash_ctx **ctx)
 {
 	return mbed_hash_alloc_ctx(ctx, MBEDTLS_MD_SHA224);
 }
-#endif
 
-#if defined(CFG_CRYPTO_SHA256)
 TEE_Result crypto_sha256_alloc_ctx(struct crypto_hash_ctx **ctx)
 {
 	return mbed_hash_alloc_ctx(ctx, MBEDTLS_MD_SHA256);
 }
-#endif
+#
 
-#if defined(CFG_CRYPTO_SHA384)
 TEE_Result crypto_sha384_alloc_ctx(struct crypto_hash_ctx **ctx)
 {
 	return mbed_hash_alloc_ctx(ctx, MBEDTLS_MD_SHA384);
 }
-#endif
 
-#if defined(CFG_CRYPTO_SHA512)
 TEE_Result crypto_sha512_alloc_ctx(struct crypto_hash_ctx **ctx)
 {
 	return mbed_hash_alloc_ctx(ctx, MBEDTLS_MD_SHA512);
 }
-#endif
 
 #if defined(CFG_CRYPTO_SHA256)
 TEE_Result hash_sha256_check(const uint8_t *hash, const uint8_t *data,
@@ -227,3 +217,4 @@ int mbedtls_internal_sha512_process(mbedtls_sha512_context *ctx,
 	return 0;
 }
 #endif /*MBEDTLS_SHA512_PROCESS_ALT*/
+#endif

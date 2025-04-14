@@ -14,6 +14,8 @@
 
 #include "mbed_helpers.h"
 
+#if !defined(MBEDTLS_PSA_CRYPTO_C)
+
 TEE_Result crypto_acipher_alloc_dh_keypair(struct dh_keypair *s,
 					   size_t key_size_bits)
 {
@@ -142,3 +144,4 @@ out:
 	mbedtls_dhm_free(&dhm);
 	return res;
 }
+#endif

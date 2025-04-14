@@ -13,6 +13,7 @@
 #include <tee_api_types.h>
 #include <utee_defines.h>
 #include <util.h>
+#if !defined(MBEDTLS_PSA_CRYPTO_C)
 
 struct mbed_des3_cbc_ctx {
 	struct crypto_cipher_ctx ctx;
@@ -126,3 +127,4 @@ TEE_Result crypto_des3_cbc_alloc_ctx(struct crypto_cipher_ctx **ctx_ret)
 
 	return TEE_SUCCESS;
 }
+#endif

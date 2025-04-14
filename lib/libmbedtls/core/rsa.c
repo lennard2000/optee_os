@@ -19,6 +19,7 @@
 #include "mbed_helpers.h"
 #include "../mbedtls/library/pk_wrap.h"
 #include "../mbedtls/library/rsa_alt_helpers.h"
+#if !defined(MBEDTLS_PSA_CRYPTO_C)
 
 static TEE_Result get_tee_result(int lmd_res)
 {
@@ -875,3 +876,4 @@ out:
 	mbedtls_pk_free(&ctx);
 	return res;
 }
+#endif

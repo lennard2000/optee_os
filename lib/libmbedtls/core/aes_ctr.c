@@ -17,7 +17,7 @@
 #include <util.h>
 
 #include "mbed_helpers.h"
-
+#if !defined(MBEDTLS_PSA_CRYPTO_C)
 struct mbed_aes_ctr_ctx {
 	struct crypto_cipher_ctx ctx;
 	mbedtls_aes_context aes_ctx;
@@ -170,3 +170,4 @@ int mbedtls_aes_crypt_ctr(mbedtls_aes_context *ctx, size_t length,
 	return 0;
 }
 #endif /*MBEDTLS_AES_ALT*/
+#endif

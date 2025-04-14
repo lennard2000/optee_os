@@ -16,6 +16,8 @@
 #include <utee_defines.h>
 #include <util.h>
 
+#if !defined(MBEDTLS_PSA_CRYPTO_C)
+
 struct mbed_hmac_ctx {
 	struct crypto_mac_ctx mac_ctx;
 	mbedtls_md_context_t md_ctx;
@@ -171,4 +173,5 @@ TEE_Result crypto_hmac_sha512_alloc_ctx(struct crypto_mac_ctx **ctx)
 {
 	return mbed_hmac_alloc_ctx(ctx, MBEDTLS_MD_SHA512);
 }
+#endif
 #endif

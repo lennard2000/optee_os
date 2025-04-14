@@ -17,6 +17,8 @@
 #include <utee_defines.h>
 #include <util.h>
 
+#if !defined(MBEDTLS_PSA_CRYPTO_C)
+
 struct mbed_cmac_ctx {
 	struct crypto_mac_ctx mac_ctx;
 	mbedtls_cipher_context_t cipher_ctx;
@@ -27,6 +29,7 @@ static const struct crypto_mac_ops mbed_cmac_ops;
 
 static struct mbed_cmac_ctx *to_cmac_ctx(struct crypto_mac_ctx *ctx)
 {
+	IMSG("to_cmac_ctx");
 	assert(ctx);
 	assert(ctx->ops == &mbed_cmac_ops);
 
@@ -180,3 +183,4 @@ TEE_Result crypto_aes_cmac_alloc_ctx(struct crypto_mac_ctx **ctx_ret)
 {
 	return crypto_cmac_alloc_ctx(ctx_ret, MBEDTLS_CIPHER_ID_AES, 128);
 }
+#endif

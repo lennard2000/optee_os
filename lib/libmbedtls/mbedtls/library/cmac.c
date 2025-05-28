@@ -27,7 +27,7 @@
  */
 
 #include "common.h"
-
+#define MBEDTLS_CMAC_C
 #if defined(MBEDTLS_CMAC_C)
 
 #include "mbedtls/cmac.h"

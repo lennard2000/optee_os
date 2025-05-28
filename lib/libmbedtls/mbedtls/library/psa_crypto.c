@@ -4234,10 +4234,8 @@ static psa_status_t psa_generate_random_internal(uint8_t *output,
     GUARD_MODULE_INITIALIZED;
 
 #if defined(MBEDTLS_PSA_CRYPTO_EXTERNAL_RNG)
-
-    psa_status_t status;
-    size_t output_length = 0;
-	// this is a workaround for configuring a external rng
+	size_t output_length = 0;
+   // this is a workaround for configuring a external rng
 		uint32_t x;
 		size_t i;
 		x = 0xDEADBEEF;

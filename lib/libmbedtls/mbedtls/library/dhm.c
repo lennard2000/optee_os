@@ -14,7 +14,7 @@
  */
 
 #include "common.h"
-
+#define MBEDTLS_DHM_C
 #if defined(MBEDTLS_DHM_C)
 
 #include "mbedtls/dhm.h"

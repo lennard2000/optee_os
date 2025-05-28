@@ -19,7 +19,7 @@
 #include "tee_api_psa_types.h"
 
 psa_status_t __GP11_PSA_GenerateKey(const struct psa_key_attributes_s *attributes, mbedtls_svc_key_id_t *key);
-static mbedtls_psa_cipher_operation* __GP_11_psa_cipher_operation_init(void);
+mbedtls_psa_cipher_operation* __GP_11_psa_cipher_operation_init(void);
 psa_status_t __GP_11_psa_cipher_encrypt_setup(mbedtls_psa_cipher_operation *operation,
 											  mbedtls_svc_key_id_t key,
 											  psa_algorithm_t alg);

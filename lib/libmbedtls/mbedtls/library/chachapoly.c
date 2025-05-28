@@ -9,7 +9,7 @@
 #include "common.h"
 
 #if defined(MBEDTLS_CHACHAPOLY_C)
-
+#include "mbedtls/poly1305.h"
 #include "mbedtls/chachapoly.h"
 #include "mbedtls/platform_util.h"
 #include "mbedtls/error.h"

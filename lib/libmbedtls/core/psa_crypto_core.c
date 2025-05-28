@@ -9,14 +9,12 @@
 #include "../../core/include/crypto/crypto.h"
 #include "psa/crypto.h"
 #include "psa/crypto_values.h"
-
+#include "../include/mbedtls_config_uta.h"
 #if defined(MBEDTLS_PSA_CRYPTO_C)
-
 #if defined(MBEDTLS_PSA_CRYPTO_CONFIG)
 #include "check_crypto_config.h"
 #endif
 
-#include <../mbedtls/library/psa_crypto_core.h>
 #include "../mbedtls/library/psa_crypto_invasive.h"
 #include "../mbedtls/library/psa_crypto_driver_wrappers_no_static.h"
 #include "../mbedtls/library/psa_crypto_ecp.h"
@@ -25,7 +23,6 @@
 #include "../mbedtls/library/psa_crypto_mac.h"
 #include "../mbedtls/library/psa_crypto_rsa.h"
 #include "../mbedtls/library/psa_crypto_slot_management.h"
-#include "../mbedtls/library/psa_crypto_driver_wrappers.h"
 #include "../mbedtls/library/psa_crypto_cipher.h"
 #if defined(MBEDTLS_PSA_CRYPTO_SE_C)
 #include "psa_crypto_se.h"
@@ -35,7 +32,6 @@
  * stored keys. */
 #include "../mbedtls/library/psa_crypto_storage.h"
 
-#include "../mbedtls/library/psa_crypto_random_impl.h"
 
 #include <stdlib.h>
 #include <string.h>

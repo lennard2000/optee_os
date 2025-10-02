@@ -178,3 +178,10 @@
         UTEE_SYSCALL _utee_psa_asymmetric_encrypt, psa_asymmetric_encrypt_function, 8
 
         UTEE_SYSCALL _utee_psa_asymmetric_decrypt, psa_asymmetric_decrypt_function, 8
+        UTEE_SYSCALL _utee_cryp_psa_init,                 psa_crypto_init_function,            0
+        UTEE_SYSCALL _utee_cryp_psa_generate_random,      psa_generate_random_function,        2
+        UTEE_SYSCALL _utee_cryp_psa_destroy_key,          psa_destroy_key_function,            1
+        UTEE_SYSCALL _utee_cryp_psa_set_key_usage_flags,  psa_set_key_usage_flags_function,    2
+        UTEE_SYSCALL _utee_cryp_psa_set_key_algorithm,    psa_set_key_algorithm_function,      2
+        UTEE_SYSCALL _utee_cryp_psa_set_key_type,         psa_set_key_type_function,           2
+        UTEE_SYSCALL _utee_cryp_psa_set_key_bits,         psa_set_key_bits_function,           2

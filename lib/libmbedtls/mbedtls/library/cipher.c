@@ -50,7 +50,7 @@
 #if defined(MBEDTLS_NIST_KW_C)
 #include "mbedtls/nist_kw.h"
 #endif
-
+#define MBEDTLS_CIPHER_PADDING_PKCS7
 #include "mbedtls/platform.h"
 
 static int supported_init = 0;
@@ -128,6 +128,7 @@ const mbedtls_cipher_info_t *mbedtls_cipher_info_from_values(
             return def->info;
         }
     }
+	DMSG("mbedtls_cipher_info_t failed");
 
     return NULL;
 }
@@ -1178,7 +1179,6 @@ int mbedtls_cipher_set_padding_mode(mbedtls_cipher_context_t *ctx,
         return 0;
     }
 #endif /* MBEDTLS_USE_PSA_CRYPTO && !MBEDTLS_DEPRECATED_REMOVED */
-
     switch (mode) {
 #if defined(MBEDTLS_CIPHER_PADDING_PKCS7)
         case MBEDTLS_PADDING_PKCS7:

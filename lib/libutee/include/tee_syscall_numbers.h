@@ -107,7 +107,14 @@
 #define psa_verify_hash_function 96
 #define psa_asymmetric_encrypt_function 97
 #define psa_asymmetric_decrypt_function 98
-#define TEE_SCN_MAX				101
+#define psa_crypto_init_function 99
+#define psa_generate_random_function          100
+#define psa_destroy_key_function              101
+#define psa_set_key_usage_flags_function      102
+#define psa_set_key_algorithm_function        103
+#define psa_set_key_type_function             104
+#define psa_set_key_bits_function             105
+#define TEE_SCN_MAX				105
 
 /* Maximum number of allowed arguments for a syscall */
 #define TEE_SVC_MAX_ARGS			8

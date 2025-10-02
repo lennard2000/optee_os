@@ -17,11 +17,12 @@
 #define MBEDTLS_DES_C
 #define MBEDTLS_AES_C
 #define MBEDTLS_NIST_KW_C
-#define MBEDTLS_CIPHER_MODE_CTR
-#define MBEDTLS_POLY1305_C
-#define MBEDTLS_CHACHA20_C
-#define MBEDTLS_CHACHAPOLY_C
-
+#define MBEDTLS_CIPHER_MODE_WITH_PADDING
+// these defines need extra configs, so they are excluded
+// #define MBEDTLS_POLY1305_C
+// #define MBEDTLS_CHACHA20_C
+// #define MBEDTLS_CHACHAPOLY_C
+#define DMBEDTLS_PK_PARSE_C
 #define MBEDTLS_SHA1_C
 #define MBEDTLS_SHA256_C
 #define MBEDTLS_SHA384_C

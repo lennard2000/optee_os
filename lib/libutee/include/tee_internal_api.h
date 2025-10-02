@@ -16,34 +16,53 @@
 #include <tee_api_defines.h>
 #include <tee_api_types.h>
 #include <trace.h>
-#include "tee_api_psa_types.h"
+#include  <tee_api_psa_types.h>
+
+
 
 psa_status_t __GP11_PSA_GenerateKey(const struct psa_key_attributes_s *attributes, mbedtls_svc_key_id_t *key);
-mbedtls_psa_cipher_operation* __GP_11_psa_cipher_operation_init(void);
-psa_status_t __GP_11_psa_cipher_encrypt_setup(mbedtls_psa_cipher_operation *operation,
+struct psa_cipher_operation_s* __GP_11_psa_cipher_operation_init(void);
+psa_status_t __GP11_psa_crypt(void);
+psa_status_t __GP_11_psa_cipher_encrypt_setup(struct psa_cipher_operation_s *operation,
 											  mbedtls_svc_key_id_t key,
 											  psa_algorithm_t alg);
-psa_status_t __GP_11_psa_cipher_decrypt_setup(mbedtls_psa_cipher_operation *operation,
+psa_status_t __GP_11_psa_cipher_decrypt_setup(struct psa_cipher_operation_s *operation,
 											  mbedtls_svc_key_id_t key,
 											  psa_algorithm_t alg);
-psa_status_t __GP_11_psa_cipher_generate_iv(mbedtls_psa_cipher_operation *operation,
+psa_status_t __GP_11_psa_cipher_generate_iv(struct psa_cipher_operation_s *operation,
 											uint8_t *iv,
 											size_t iv_size,
 											size_t *iv_length);
-psa_status_t __GP_11_psa_cipher_set_iv(mbedtls_psa_cipher_operation *operation,
+psa_status_t __GP11_psa_generate_random(uint8_t *output, size_t output_size);
+
+psa_status_t __GP11_psa_destroy_key(psa_key_id_t key);
+
+void __GP11_psa_set_key_usage_flags(psa_key_attributes_t *attributes,
+				    psa_key_usage_t usage_flags);
+
+void __GP11_psa_set_key_algorithm(psa_key_attributes_t *attributes,
+				  psa_algorithm_t alg);
+
+void __GP11_psa_set_key_type(psa_key_attributes_t *attributes,
+			     psa_key_type_t type);
+
+void __GP11_psa_set_key_bits(psa_key_attributes_t *attributes,
+			     size_t bits);
+
+psa_status_t __GP_11_psa_cipher_set_iv(struct psa_cipher_operation_s *operation,
 									   const uint8_t *iv,
 									   size_t iv_length);
-psa_status_t __GP_11_psa_cipher_update(mbedtls_psa_cipher_operation *operation,
+psa_status_t __GP_11_psa_cipher_update(struct psa_cipher_operation_s *operation,
 									   const uint8_t *input,
 									   size_t input_length,
 									   uint8_t *output,
 									   size_t output_size,
 									   size_t *output_length);
-psa_status_t __GP_11_psa_cipher_finish(mbedtls_psa_cipher_operation *operation,
+psa_status_t __GP_11_psa_cipher_finish(struct psa_cipher_operation_s *operation,
 									   uint8_t *output,
 									   size_t output_size,
 									   size_t *output_length);
-psa_status_t __GP_11_psa_cipher_abort(mbedtls_psa_cipher_operation *operation);
+psa_status_t __GP_11_psa_cipher_abort(struct psa_cipher_operation_s *operation);
 psa_status_t __GP_11_psa_aead_encrypt(
     mbedtls_svc_key_id_t key,
     psa_algorithm_t alg,
@@ -72,47 +91,47 @@ psa_status_t __GP_11_psa_aead_decrypt(
     size_t *plaintext_length
 );
 
-psa_aead_operation* __GP_11_psa_aead_operation_init(void);
+struct psa_aead_operation_s * __GP_11_psa_aead_operation_init(void);
 
 psa_status_t __GP_11_psa_aead_encrypt_setup(
-    psa_aead_operation *operation,
+    struct psa_aead_operation_s *operation,
     mbedtls_svc_key_id_t key,
     psa_algorithm_t alg
 );
 
 psa_status_t __GP_11_psa_aead_decrypt_setup(
-    psa_aead_operation *operation,
+    struct psa_aead_operation_s *operation,
     mbedtls_svc_key_id_t key,
     psa_algorithm_t alg
 );
 
 psa_status_t __GP_11_psa_aead_generate_nonce(
-    psa_aead_operation *operation,
+    struct psa_aead_operation_s *operation,
     uint8_t *nonce,
     size_t nonce_size,
     size_t *nonce_length
 );
 
 psa_status_t __GP_11_psa_aead_set_nonce(
-    psa_aead_operation *operation,
+    struct psa_aead_operation_s *operation,
     const uint8_t *nonce,
     size_t nonce_length
 );
 
 psa_status_t __GP_11_psa_aead_set_lengths(
-    psa_aead_operation *operation,
+    struct psa_aead_operation_s *operation,
     size_t ad_length,
     size_t plaintext_length
 );
 
 psa_status_t __GP_11_psa_aead_update_ad(
-    psa_aead_operation *operation,
+    struct psa_aead_operation_s *operation,
     const uint8_t *input,
     size_t input_length
 );
 
 psa_status_t __GP_11_psa_aead_update(
-    psa_aead_operation *operation,
+    struct psa_aead_operation_s *operation,
     const uint8_t *input,
     size_t input_length,
     uint8_t *output,
@@ -121,7 +140,7 @@ psa_status_t __GP_11_psa_aead_update(
 );
 
 psa_status_t __GP_11_psa_aead_finish(
-    psa_aead_operation *operation,
+    struct psa_aead_operation_s *operation,
     uint8_t *ciphertext,
     size_t ciphertext_size,
     size_t *ciphertext_length,
@@ -131,7 +150,7 @@ psa_status_t __GP_11_psa_aead_finish(
 );
 
 psa_status_t __GP_11_psa_aead_verify(
-    psa_aead_operation *operation,
+    struct psa_aead_operation_s *operation,
     uint8_t *plaintext,
     size_t plaintext_size,
     size_t *plaintext_length,
@@ -139,7 +158,7 @@ psa_status_t __GP_11_psa_aead_verify(
     size_t tag_length
 );
 
-psa_status_t __GP_11_psa_aead_abort(psa_aead_operation *operation);
+psa_status_t __GP_11_psa_aead_abort(struct psa_aead_operation_s *operation);
 
 psa_status_t __GP_11_psa_sign_message(
     mbedtls_svc_key_id_t key,

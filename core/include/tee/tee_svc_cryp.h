@@ -163,7 +163,44 @@ psa_status_t syscall_cryp_psa_hash_compute(psa_algorithm_t alg,
                                            uint8_t *hash,
                                            size_t hash_size,
                                            size_t *hash_length);
+psa_status_t syscall_cryp_psa_init(void);
 
+TEE_Result syscall_cryp_psa_sign_hash(unsigned long a0, unsigned long a1,
+                                      unsigned long a2, unsigned long a3,
+                                      unsigned long a4, unsigned long a5,
+                                      unsigned long a6, unsigned long a7);
+
+TEE_Result syscall_cryp_psa_verify_hash(unsigned long a0, unsigned long a1,
+                                        unsigned long a2, unsigned long a3,
+                                        unsigned long a4, unsigned long a5,
+                                        unsigned long a6, unsigned long a7);
+
+TEE_Result syscall_cryp_psa_asymmetric_encrypt(unsigned long a0, unsigned long a1,
+                                               unsigned long a2, unsigned long a3,
+                                               unsigned long a4, unsigned long a5,
+                                               unsigned long a6, unsigned long a7);
+
+TEE_Result syscall_cryp_psa_asymmetric_decrypt(unsigned long a0, unsigned long a1,
+                                               unsigned long a2, unsigned long a3,
+                                               unsigned long a4, unsigned long a5,
+                                               unsigned long a6, unsigned long a7);
+
+psa_status_t syscall_cryp_psa_generate_random(void * output,
+					      size_t output_size);
+
+psa_status_t syscall_cryp_psa_destroy_key(psa_key_id_t key);
+
+void syscall_cryp_psa_set_key_usage_flags(psa_key_attributes_t *attributes,
+					  psa_key_usage_t usage_flags);
+
+void syscall_cryp_psa_set_key_algorithm(psa_key_attributes_t *attributes,
+					psa_algorithm_t alg);
+
+void syscall_cryp_psa_set_key_type(psa_key_attributes_t *attributes,
+				   psa_key_type_t type);
+
+void syscall_cryp_psa_set_key_bits(psa_key_attributes_t *attributes,
+				   size_t bits);
 
 
 TEE_Result syscall_cryp_state_alloc(unsigned long algo, unsigned long op_mode,

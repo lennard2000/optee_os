@@ -349,10 +349,8 @@ typedef struct mbedtls_cipher_context_t {
     /** The cipher-specific context. */
     void *MBEDTLS_PRIVATE(cipher_ctx);
 
-#if defined(MBEDTLS_CMAC_C)
     /** CMAC-specific context. */
     mbedtls_cmac_context_t *MBEDTLS_PRIVATE(cmac_ctx);
-#endif
 
 #if defined(MBEDTLS_USE_PSA_CRYPTO) && !defined(MBEDTLS_DEPRECATED_REMOVED)
     /** Indicates whether the cipher operations should be performed

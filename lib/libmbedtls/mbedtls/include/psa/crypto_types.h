@@ -28,7 +28,7 @@
  * TF-PSA-Crypto repository which has a different build system and
  * configuration.
  */
-#include "psa/build_info.h"
+#include "build_info.h"
 
 /* Define the MBEDTLS_PRIVATE macro. */
 #include "mbedtls/private_access.h"

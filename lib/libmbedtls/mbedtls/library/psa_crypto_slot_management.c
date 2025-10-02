@@ -806,6 +806,7 @@ psa_status_t psa_get_and_lock_key_slot(mbedtls_svc_key_id_t key,
     }
 
 #if defined(MBEDTLS_THREADING_C)
+	DMSG("MBEDTLS_THREADING_C");
     /* We need to set status as success, otherwise CORRUPTION_DETECTED
      * would be returned if the lock fails. */
     status = PSA_SUCCESS;

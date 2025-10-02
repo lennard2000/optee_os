@@ -15,6 +15,7 @@
 #include "check_crypto_config.h"
 #endif
 
+#include <../mbedtls/library/psa_crypto_core.h>
 #include "../mbedtls/library/psa_crypto_invasive.h"
 #include "../mbedtls/library/psa_crypto_driver_wrappers_no_static.h"
 #include "../mbedtls/library/psa_crypto_ecp.h"
@@ -285,6 +286,38 @@ psa_status_t psa_mac_compute_proxy(mbedtls_svc_key_id_t key,
 
 psa_hash_operation_t psa_hash_operation_init_proxy(void) {
     return psa_hash_operation_init();
+}
+psa_status_t psa_init_proxy(void) {
+return psa_crypto_init();
+}
+
+psa_status_t psa_generate_random_proxy(uint8_t *output,
+				       size_t output_size) {
+	return psa_generate_random(output, output_size);
+}
+
+psa_status_t psa_destroy_key_proxy(psa_key_id_t key) {
+	return psa_destroy_key(key);
+}
+
+void psa_set_key_usage_flags_proxy(psa_key_attributes_t *attributes,
+				   psa_key_usage_t usage_flags) {
+	psa_set_key_usage_flags(attributes, usage_flags);
+}
+
+void psa_set_key_algorithm_proxy(psa_key_attributes_t *attributes,
+				 psa_algorithm_t alg) {
+	psa_set_key_algorithm(attributes, alg);
+}
+
+void psa_set_key_type_proxy(psa_key_attributes_t *attributes,
+			    psa_key_type_t type) {
+	psa_set_key_type(attributes, type);
+}
+
+void psa_set_key_bits_proxy(psa_key_attributes_t *attributes,
+			    size_t bits) {
+	psa_set_key_bits(attributes, bits);
 }
 
 psa_status_t psa_hash_compute_proxy(psa_algorithm_t alg,

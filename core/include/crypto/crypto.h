@@ -189,6 +189,24 @@ psa_status_t psa_hash_compute_proxy(psa_algorithm_t alg,
                                     uint8_t *hash,
                                     size_t hash_size,
                                     size_t *hash_length);
+psa_status_t psa_init_proxy(void);
+
+psa_status_t psa_generate_random_proxy(uint8_t *output,
+				       size_t output_size);
+
+psa_status_t psa_destroy_key_proxy(psa_key_id_t key);
+
+void psa_set_key_usage_flags_proxy(psa_key_attributes_t *attributes,
+				   psa_key_usage_t usage_flags);
+
+void psa_set_key_algorithm_proxy(psa_key_attributes_t *attributes,
+				 psa_algorithm_t alg);
+
+void psa_set_key_type_proxy(psa_key_attributes_t *attributes,
+			    psa_key_type_t type);
+
+void psa_set_key_bits_proxy(psa_key_attributes_t *attributes,
+			    size_t bits);
 
 
 /* Message digest functions */

@@ -80,6 +80,7 @@ static psa_status_t mbedtls_cipher_validate_values(
 #if !defined(PSA_WANT_ALG_CBC_NO_PADDING)
     MBEDTLS_ASSUME(alg != PSA_ALG_CBC_NO_PADDING);
 #endif
+#define PSA_WANT_ALG_CBC_PKCS7
 #if !defined(PSA_WANT_ALG_CBC_PKCS7)
     MBEDTLS_ASSUME(alg != PSA_ALG_CBC_PKCS7);
 #endif
@@ -116,6 +117,7 @@ static psa_status_t mbedtls_cipher_validate_values(
             key_type == PSA_KEY_TYPE_ARIA ||
             key_type == PSA_KEY_TYPE_DES ||
             key_type == PSA_KEY_TYPE_CAMELLIA) {
+        	DMSG("match alg keytype");
             return PSA_SUCCESS;
         }
     }
@@ -169,11 +171,14 @@ psa_status_t mbedtls_cipher_values_from_psa(
 #endif
 #if defined(MBEDTLS_PSA_BUILTIN_ALG_CBC_NO_PADDING)
             case PSA_ALG_CBC_NO_PADDING:
+        	DMSG("PSA_ALG_CBC_NO_PADDING");
                 *mode = MBEDTLS_MODE_CBC;
                 break;
 #endif
+#define MBEDTLS_PSA_BUILTIN_ALG_CBC_PKCS7
 #if defined(MBEDTLS_PSA_BUILTIN_ALG_CBC_PKCS7)
             case PSA_ALG_CBC_PKCS7:
+        	DMSG("PSA_ALG_CBC_PKCS7");
                 *mode = MBEDTLS_MODE_CBC;
                 break;
 #endif
@@ -205,10 +210,12 @@ psa_status_t mbedtls_cipher_values_from_psa(
     } else {
         return PSA_ERROR_NOT_SUPPORTED;
     }
+	DMSG("cipher Keytype %hu", key_type);
 
     switch (key_type) {
 #if defined(MBEDTLS_PSA_BUILTIN_KEY_TYPE_AES)
         case PSA_KEY_TYPE_AES:
+    	DMSG("PSA_KEY_TYPE_AES");
             cipher_id_tmp = MBEDTLS_CIPHER_ID_AES;
             break;
 #endif
@@ -221,6 +228,7 @@ psa_status_t mbedtls_cipher_values_from_psa(
         case PSA_KEY_TYPE_DES:
             /* key_bits is 64 for Single-DES, 128 for two-key Triple-DES,
              * and 192 for three-key Triple-DES. */
+    	DMSG("PSA_KEY_TYPE_DES");
             if (*key_bits == 64) {
                 cipher_id_tmp = MBEDTLS_CIPHER_ID_DES;
             } else {
@@ -267,9 +275,11 @@ const mbedtls_cipher_info_t *mbedtls_cipher_info_from_psa(
 
     status = mbedtls_cipher_values_from_psa(alg, key_type, &key_bits, &mode, &cipher_id_tmp);
     if (status != PSA_SUCCESS) {
+    	DMSG("mbedtls_cipher_values_from_psa failed");
         return NULL;
     }
     if (cipher_id != NULL) {
+    	DMSG("cipher_id null");
         *cipher_id = cipher_id_tmp;
     }
 
@@ -300,11 +310,13 @@ static psa_status_t psa_cipher_setup(
     cipher_info = mbedtls_cipher_info_from_psa(alg, key_type,
                                                key_bits, NULL);
     if (cipher_info == NULL) {
+    	DMSG("psa_cipher info failed");
         return PSA_ERROR_NOT_SUPPORTED;
     }
 
     ret = mbedtls_cipher_setup(&operation->ctx.cipher, cipher_info);
     if (ret != 0) {
+    	DMSG("psa_cipher_setup failed");
         goto exit;
     }
 
@@ -324,6 +336,7 @@ static psa_status_t psa_cipher_setup(
                                     (int) key_bits, cipher_operation);
     }
     if (ret != 0) {
+    	DMSG("set key failed");
         goto exit;
     }
 
@@ -344,6 +357,7 @@ static psa_status_t psa_cipher_setup(
             break;
     }
     if (ret != 0) {
+    	DMSG("padding mode failed");
         goto exit;
     }
 #endif /* MBEDTLS_PSA_BUILTIN_ALG_CBC_NO_PADDING ||

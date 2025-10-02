@@ -1268,9 +1268,10 @@ psa_status_t psa_destroy_key(mbedtls_svc_key_id_t key)
     psa_status_t status; /* status of the last operation */
     psa_status_t overall_status = PSA_SUCCESS;
 #if defined(MBEDTLS_PSA_CRYPTO_SE_C)
+	DMSG("MBEDTLS_PSA_CRYPTO_SE_C");
     psa_se_drv_table_entry_t *driver;
 #endif /* MBEDTLS_PSA_CRYPTO_SE_C */
-
+	DMSG("before key null check");
     if (mbedtls_svc_key_id_is_null(key)) {
         return PSA_SUCCESS;
     }
@@ -4234,7 +4235,7 @@ static psa_status_t psa_generate_random_internal(uint8_t *output,
     GUARD_MODULE_INITIALIZED;
 
 #if defined(MBEDTLS_PSA_CRYPTO_EXTERNAL_RNG)
-	size_t output_length = 0;
+	DMSG("MBEDTLS_PSA_CRYPTO_EXTERNAL_RNG");
    // this is a workaround for configuring a external rng
 		uint32_t x;
 		size_t i;
@@ -4249,14 +4250,6 @@ static psa_status_t psa_generate_random_internal(uint8_t *output,
 			output[i] = (uint8_t)(x & 0xFF);
 		}
 
-		if (output_length)
-			output_length = output_size;
-
-    /* Breaking up a request into smaller chunks is currently not supported
-     * for the external RNG interface. */
-    if (output_length != output_size) {
-        return PSA_ERROR_INSUFFICIENT_ENTROPY;
-    }
     return PSA_SUCCESS;
 
 #else /* MBEDTLS_PSA_CRYPTO_EXTERNAL_RNG */
@@ -4292,6 +4285,7 @@ static psa_status_t psa_cipher_setup(psa_cipher_operation_t *operation,
                                      psa_algorithm_t alg,
                                      mbedtls_operation_t cipher_operation)
 {
+	DMSG("cipher setup");
     psa_status_t status = PSA_ERROR_CORRUPTION_DETECTED;
     psa_status_t unlock_status = PSA_ERROR_CORRUPTION_DETECTED;
     psa_key_slot_t *slot = NULL;
@@ -4312,6 +4306,7 @@ static psa_status_t psa_cipher_setup(psa_cipher_operation_t *operation,
 
     status = psa_get_and_lock_key_slot_with_policy(key, &slot, usage, alg);
     if (status != PSA_SUCCESS) {
+    	DMSG("psa_get_and_lock_key_slot failed");
         goto exit;
     }
 
@@ -7933,6 +7928,7 @@ psa_status_t psa_generate_key_internal(
     if (key_type_is_raw_bytes(type)) {
         status = psa_generate_random_internal(key_buffer, key_buffer_size);
         if (status != PSA_SUCCESS) {
+        	DMSG("random internal failed");
             return status;
         }
 
@@ -8016,6 +8012,7 @@ psa_status_t psa_generate_key_custom(const psa_key_attributes_t *attributes,
     status = psa_start_key_creation(PSA_KEY_CREATION_GENERATE, attributes,
                                     &slot, &driver);
     if (status != PSA_SUCCESS) {
+	DMSG("start key failed");
         goto exit;
     }
 
@@ -8029,6 +8026,7 @@ psa_status_t psa_generate_key_custom(const psa_key_attributes_t *attributes,
             status = psa_validate_key_type_and_size_for_key_generation(
                 attributes->type, attributes->bits);
             if (status != PSA_SUCCESS) {
+            	DMSG("validate key failed");
                 goto exit;
             }
 
@@ -8039,12 +8037,14 @@ psa_status_t psa_generate_key_custom(const psa_key_attributes_t *attributes,
             status = psa_driver_wrapper_get_key_buffer_size(
                 attributes, &key_buffer_size);
             if (status != PSA_SUCCESS) {
+            	DMSG("Driver key buffer size failed");
                 goto exit;
             }
         }
 
         status = psa_allocate_buffer_to_slot(slot, key_buffer_size);
         if (status != PSA_SUCCESS) {
+        	DMSG("buffer allocation failed");
             goto exit;
         }
     }
@@ -8055,6 +8055,7 @@ psa_status_t psa_generate_key_custom(const psa_key_attributes_t *attributes,
                                              slot->key.data, slot->key.bytes,
                                              &slot->key.bytes);
     if (status != PSA_SUCCESS) {
+    	DMSG("driver wrapper key gen failed");
         psa_remove_key_data_from_memory(slot);
     }
 

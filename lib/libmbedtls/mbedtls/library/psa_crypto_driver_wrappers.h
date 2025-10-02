@@ -734,6 +734,7 @@ static inline psa_status_t psa_driver_wrapper_generate_key(
     const uint8_t *custom_data, size_t custom_data_length,
     uint8_t *key_buffer, size_t key_buffer_size, size_t *key_buffer_length )
 {
+	DMSG("psa_driver_wrapper_generate_key");
     psa_status_t status = PSA_ERROR_CORRUPTION_DETECTED;
     psa_key_location_t location =
         PSA_KEY_LIFETIME_GET_LOCATION(psa_get_key_lifetime(attributes));
@@ -756,7 +757,7 @@ static inline psa_status_t psa_driver_wrapper_generate_key(
 #if defined(MBEDTLS_PSA_CRYPTO_SE_C)
     const psa_drv_se_t *drv;
     psa_drv_se_context_t *drv_context;
-
+	DMSG("MBEDTLS_PSA_CRYPTO_SE_C");
     if( psa_get_se_driver( psa_get_key_lifetime(attributes), &drv, &drv_context ) )
     {
         size_t pubkey_length = 0; /* We don't support this feature yet */
@@ -776,7 +777,9 @@ static inline psa_status_t psa_driver_wrapper_generate_key(
     switch( location )
     {
         case PSA_KEY_LOCATION_LOCAL_STORAGE:
+    	DMSG("PSA_KEY_LOCATION_LOCAL_STORAGE");
 #if defined(PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT)
+    	DMSG("PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT");
             /* Transparent drivers are limited to generating asymmetric keys. */
             /* We don't support passing custom production parameters
              * to drivers yet. */
@@ -785,6 +788,7 @@ static inline psa_status_t psa_driver_wrapper_generate_key(
             {
             /* Cycle through all known transparent accelerators */
 #if defined(PSA_CRYPTO_DRIVER_TEST)
+            	DMSG("PSA_CRYPTO_DRIVER_TEST");
                 status = mbedtls_test_transparent_generate_key(
                     attributes, key_buffer, key_buffer_size,
                     key_buffer_length );
@@ -793,6 +797,7 @@ static inline psa_status_t psa_driver_wrapper_generate_key(
                     break;
 #endif /* PSA_CRYPTO_DRIVER_TEST */
 #if defined(MBEDTLS_PSA_P256M_DRIVER_ENABLED)
+            	DMSG("MBEDTLS_PSA_P256M_DRIVER_ENABLED");
                 if( PSA_KEY_TYPE_IS_ECC( psa_get_key_type(attributes) ) &&
                     psa_get_key_type(attributes) == PSA_KEY_TYPE_ECC_KEY_PAIR(PSA_ECC_FAMILY_SECP_R1) &&
                     psa_get_key_bits(attributes) == 256 )
@@ -819,6 +824,7 @@ static inline psa_status_t psa_driver_wrapper_generate_key(
 #if defined(PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT)
 #if defined(PSA_CRYPTO_DRIVER_TEST)
         case PSA_CRYPTO_TEST_DRIVER_LOCATION:
+    	DMSG("PSA_CRYPTO_TEST_DRIVER_LOCATION");
             status = mbedtls_test_opaque_generate_key(
                 attributes, key_buffer, key_buffer_size, key_buffer_length );
             break;
@@ -1254,6 +1260,7 @@ static inline psa_status_t psa_driver_wrapper_cipher_encrypt_setup(
     switch( location )
     {
         case PSA_KEY_LOCATION_LOCAL_STORAGE:
+    		DMSG("PSA_KEY_LOCATION_LOCAL_STORAGE");
             /* Key is stored in the slot in export representation, so
              * cycle through all known transparent accelerators */
 #if defined(PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT)
@@ -1273,6 +1280,7 @@ static inline psa_status_t psa_driver_wrapper_cipher_encrypt_setup(
 #endif /* PSA_CRYPTO_DRIVER_TEST */
 #endif /* PSA_CRYPTO_ACCELERATOR_DRIVER_PRESENT */
 #if defined(MBEDTLS_PSA_BUILTIN_CIPHER)
+    	DMSG("built in cipher");
             /* Fell through, meaning no accelerator supports this operation */
             status = mbedtls_psa_cipher_encrypt_setup( &operation->ctx.mbedtls_ctx,
                                                        attributes,
@@ -1285,6 +1293,7 @@ static inline psa_status_t psa_driver_wrapper_cipher_encrypt_setup(
             if( status != PSA_ERROR_NOT_SUPPORTED )
                 return( status );
 #endif /* MBEDTLS_PSA_BUILTIN_CIPHER */
+    		DMSG("Defines Wrong");
             return( PSA_ERROR_NOT_SUPPORTED );
 
         /* Add cases for opaque driver here */

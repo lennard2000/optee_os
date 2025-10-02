@@ -1,5 +1,10 @@
 global-incdirs-y += include
 global-incdirs-y += mbedtls/include
+cppflags-y += -DMBEDTLS_ALLOW_PRIVATE_ACCESS
+cppflags-y += -DMBEDTLS_PSA_CRYPTO_C
+cppflags-y += -DMBEDTLS_PSA_CRYPTO_EXTERNAL_RNG
+cppflags-y += -DMBEDTLS_PK_PARSE_C
+cppflags-y += -DMBEDTLS_NIST_KW_C
 
 # OBJS_CRYPTO from make file
 SRCS_CRYPTO :=
@@ -70,6 +75,9 @@ SRCS_CRYPTO += timing.c
 SRCS_CRYPTO += version.c
 SRCS_CRYPTO += version_features.c
 else
+SRCS_CRYPTO += base64.c
+SRCS_CRYPTO += pem.c
+SRCS_CRYPTO += nist_kw.c
 SRCS_CRYPTO += aes.c
 SRCS_CRYPTO += aesni.c
 SRCS_CRYPTO += asn1parse.c
@@ -95,6 +103,8 @@ SRCS_CRYPTO += oid.c
 SRCS_CRYPTO += pk.c
 SRCS_CRYPTO += pk_ecc.c
 SRCS_CRYPTO += pk_wrap.c
+SRCS_CRYPTO += pkwrite.c
+SRCS_CRYPTO += pkparse.c
 SRCS_CRYPTO += platform.c
 SRCS_CRYPTO += platform_util.c
 SRCS_CRYPTO += rsa.c
@@ -156,15 +166,7 @@ srcs-y += $(addprefix mbedtls/library/, $(SRCS_CRYPTO))
 srcs-$(sm-$(ta-target)) += $(addprefix mbedtls/library/, $(SRCS_X509))
 srcs-$(sm-$(ta-target)) += $(addprefix mbedtls/library/, $(SRCS_TLS))
 srcs-y += $(addprefix mbedtls/library/, $(SRCS_PSA))
-#these files are not properly added to srcs-y so we hardcode them here
-srcs-y += mbedtls/library/chacha20.c
-srcs-y += mbedtls/library/chachapoly.c
-srcs-y += mbedtls/library/nist_kw.c
-srcs-y += mbedtls/library/cmac.c
-srcs-y += mbedtls/library/dhm.c
-srcs-y += mbedtls/library/pem.c
-srcs-y += mbedtls/library/base64.c
-srcs-y += mbedtls/library/poly1305.c
+
 cflags-lib-y += -Wno-redundant-decls
 cflags-lib-y += -Wno-switch-default
 cflags-lib-y += -Wno-declaration-after-statement
